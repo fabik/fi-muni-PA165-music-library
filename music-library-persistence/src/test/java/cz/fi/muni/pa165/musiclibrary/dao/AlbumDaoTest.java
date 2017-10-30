@@ -49,8 +49,6 @@ public class AlbumDaoTest  extends AbstractTestNGSpringContextTests{
     private Album a;
     
     private Musician m1;
-    
-    private Genre g1;
 
     @BeforeMethod
     public void createAlbum() throws ParseException{
@@ -82,7 +80,7 @@ public class AlbumDaoTest  extends AbstractTestNGSpringContextTests{
     
     @Test
     public void testCreate(){
-        Assert.assertEquals(albumDao.findById(1l).getTitle(), "Testovaci album");
+        Assert.assertEquals(albumDao.findById(a.getId()).getTitle(), "Testovaci album");
     }
     
     @Test
@@ -115,7 +113,6 @@ public class AlbumDaoTest  extends AbstractTestNGSpringContextTests{
         g.setName("Genre");
         genreDao.create(g);
         musicianDao.create(m1);
-        
         Song s = new Song();
         s.setAlbum(a);
         s.setTitle("Song");
@@ -126,7 +123,35 @@ public class AlbumDaoTest  extends AbstractTestNGSpringContextTests{
         songDao.create(s);
         a.addSong(s);
         
-        albumDao.findByMusician(m1); 
+        albumDao.findByMusician(m1);
+        Assert.assertEquals(albumDao.findByMusician(m1).size(), 1);
+        Assert.assertEquals(albumDao.findByMusician(m1).get(0).getTitle(), "Testovaci album");
+        Assert.assertEquals(albumDao.findByMusician(m1).get(0).getSongs().size(), 3);
+    }
+    
+    @Test
+    public void testFindByGenre(){
+        m1 = new Musician();
+        m1.setName("Onassis");
+        Genre g = new Genre();
+        g.setName("Genre");
+        genreDao.create(g);
+        musicianDao.create(m1);
+        Song s = new Song();
+        s.setAlbum(a);
+        s.setTitle("Song");
+        s.setBitrate(345);
+        s.setPosition(1);
+        s.setMusician(m1);
+        s.setGenre(g);
+        songDao.create(s);
+        a.addSong(s);
+        
+        albumDao.findByGenre(g); 
+        
+        Assert.assertEquals(albumDao.findByMusician(m1).size(), 1);
+        Assert.assertEquals(albumDao.findByMusician(m1).get(0).getTitle(), "Testovaci album");
+        Assert.assertEquals(albumDao.findByMusician(m1).get(0).getSongs().size(), 3);
     }
     
     @Test
@@ -134,9 +159,15 @@ public class AlbumDaoTest  extends AbstractTestNGSpringContextTests{
         List<Album> albums = albumDao.findByTitle("Testovaci album");
         Assert.assertEquals(albums.size(), 1);
         Assert.assertTrue(albums.contains(a));
-        
     }
     
+    @Test
+    public void testWithNonExistingTitle(){
+        List<Album> albums = albumDao.findByTitle("avdsfa");
+        Assert.assertEquals(albums.size(), 0);
+        Assert.assertTrue(!albums.contains(a));
+    }
+   
     @Test
     public void testFindAll(){
         List<Album> albums = albumDao.findAll();
