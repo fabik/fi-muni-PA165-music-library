@@ -11,36 +11,36 @@
         modelAttribute="songCreate" cssClass="form-horizontal">
 
     <div class="form-group">
-        <form:label path="color" cssClass="col-sm-2 control-label">Musician</form:label>
+        <form:label path="musicianId" cssClass="col-sm-2 control-label">Musician</form:label>
         <div class="col-sm-10">
-            <form:select path="musician" cssClass="form-control">
+            <form:select path="musicianId" cssClass="form-control">
                 <c:forEach items="${musicians}" var="m">
                     <form:option value="${m}">${m}</form:option>
                 </c:forEach>
             </form:select>
-            <form:errors path="musician" cssClass="error"/>
+            <form:errors path="musicianId" cssClass="error"/>
         </div>
     </div>
     <div class="form-group">
-        <form:label path="color" cssClass="col-sm-2 control-label">Genre</form:label>
+        <form:label path="genreId" cssClass="col-sm-2 control-label">Genre</form:label>
         <div class="col-sm-10">
-            <form:select path="genre" cssClass="form-control">
+            <form:select path="genreId" cssClass="form-control">
                 <c:forEach items="${genres}" var="g">
                     <form:option value="${g}">${g}</form:option>
                 </c:forEach>
             </form:select>
-            <form:errors path="genre" cssClass="error"/>
+            <form:errors path="genreId" cssClass="error"/>
         </div>
     </div>
     <div class="form-group">
-        <form:label path="color" cssClass="col-sm-2 control-label">Album</form:label>
+        <form:label path="albumId" cssClass="col-sm-2 control-label">Album</form:label>
         <div class="col-sm-10">
-            <form:select path="album" cssClass="form-control">
+            <form:select path="albumId" cssClass="form-control">
                 <c:forEach items="${albums}" var="a">
                     <form:option value="${a}">${a}</form:option>
                 </c:forEach>
             </form:select>
-            <form:errors path="album" cssClass="error"/>
+            <form:errors path="albumId" cssClass="error"/>
         </div>
     </div>
         

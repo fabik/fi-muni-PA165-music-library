@@ -2,7 +2,11 @@ package cz.fi.muni.pa165.musiclibrary.web.controllers;
 
 import cz.fi.muni.pa165.musiclibrary.dto.SongCreateDTO;
 import cz.fi.muni.pa165.musiclibrary.dto.SongDTO;
+import cz.fi.muni.pa165.musiclibrary.facade.AlbumFacade;
+import cz.fi.muni.pa165.musiclibrary.facade.GenreFacade;
+import cz.fi.muni.pa165.musiclibrary.facade.MusicianFacade;
 import cz.fi.muni.pa165.musiclibrary.facade.SongFacade;
+import cz.fi.muni.pa165.musiclibrary.web.forms.SongCreateDTOValidator;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +35,15 @@ public class SongController {
     @Autowired
     private SongFacade songFacade;
     
+    @Autowired
+    private MusicianFacade musicianFacade;
+    
+    @Autowired
+    private GenreFacade genreFacade;
+    
+    @Autowired
+    private AlbumFacade albumFacade;
+    
     
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
@@ -45,6 +60,9 @@ public class SongController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newSong(Model model) {
         model.addAttribute("songCreate", new SongCreateDTO());
+        //model.addAttribute("genres", genreFacade.findAll());
+        //model.addAttribute("albums", albumFacade.findAll());
+        //model.addAttribute("musicians", musicianFacade.findAll());
         return "song/new";
     }
     
@@ -55,7 +73,7 @@ public class SongController {
             for (FieldError fe : bindingResult.getFieldErrors()) {
                 model.addAttribute(fe.getField() + "_error", true);
             }
-            return "category/new";
+            return "song/new";
         }
         
         Long id = songFacade.create(formBean);
@@ -76,5 +94,17 @@ public class SongController {
         model.addAttribute("song", songFacade.findById(id));
         return "song/view";
     }
+    
+    /**
+	 * Spring Validator added to JSR-303 Validator for this @Controller only.
+	 * It is useful  for custom validations that are not defined on the form bean by annotations.
+	 * http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#validation-mvc-configuring
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		if (binder.getTarget() instanceof SongCreateDTO) {
+			binder.addValidators(new SongCreateDTOValidator());
+		}
+	}
     
 }
