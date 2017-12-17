@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="form-group ${bitrate_error?'has-error':''}" >
-        <form:label path="bitrate" cssClass="col-sm-2 control-label">Bitrate</form:label>
+        <form:label path="bitrate" cssClass="col-sm-2 control-label">Bitrate (kbit/s)</form:label>
         <div class="col-sm-10">
             <form:input path="bitrate" cssClass="form-control"/>
             <form:errors path="bitrate" cssClass="help-block"/>
