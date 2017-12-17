@@ -34,7 +34,7 @@ public class MusicianRestController {
 
 	/**
 	 * Get list of Musicians
-	 * <p>
+	 * 
 	 * curl -i -X GET http://localhost:8080/pa165/rest/musicians
 	 *
 	 * @return MusicianDTO
@@ -85,7 +85,6 @@ public class MusicianRestController {
 
 	/**
 	 * Create a new musician by POST method
-	 * <p>
 	 * curl -X POST -i -H "Content-Type: application/json" --data '{"name":"test"}' http://localhost:8080/pa165/rest/musicians/create
 	 *
 	 * @param musician MusicianCreateDTO with required fields for creation
