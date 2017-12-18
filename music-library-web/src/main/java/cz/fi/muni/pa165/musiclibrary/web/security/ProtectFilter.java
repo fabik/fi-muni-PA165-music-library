@@ -1,3 +1,4 @@
+
 package cz.fi.muni.pa165.musiclibrary.web.security;
 
 import cz.fi.muni.pa165.musiclibrary.dto.ApplicationUserDTO;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebFilter(urlPatterns = {"/genre/*"}) //add pages that need loging in
+@WebFilter(urlPatterns = {"/musician/*", "/album/*", "/song/*", "/genre/*"})
 public class ProtectFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest r, ServletResponse s, FilterChain chain) throws IOException, ServletException {
