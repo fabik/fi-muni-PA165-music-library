@@ -33,21 +33,6 @@ public class SongController {
     @Autowired
     private SongFacade songFacade;
     
-    @Autowired
-    private MusicianFacade musicianFacade;
-    
-    @Autowired
-    private GenreFacade genreFacade;
-    
-    @Autowired
-    private AlbumFacade albumFacade;
-    
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String login(Model model) {
-        
-        return "song/list";
-    }
-    
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         model.addAttribute("songs", songFacade.findAll());
