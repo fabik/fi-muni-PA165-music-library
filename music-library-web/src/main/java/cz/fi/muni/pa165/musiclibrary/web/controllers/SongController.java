@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,6 +42,11 @@ public class SongController {
     @Autowired
     private AlbumFacade albumFacade;
     
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String login(Model model) {
+        
+        return "song/list";
+    }
     
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
@@ -70,9 +73,9 @@ public class SongController {
     public String create(@Valid @ModelAttribute("songCreate") SongCreateDTO formBean, BindingResult bindingResult,
                          Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
         if (bindingResult.hasErrors()) {
-            for (FieldError fe : bindingResult.getFieldErrors()) {
+            bindingResult.getFieldErrors().forEach((fe) -> {
                 model.addAttribute(fe.getField() + "_error", true);
-            }
+            });
             return "song/new";
         }
         
@@ -86,7 +89,7 @@ public class SongController {
         SongDTO song = songFacade.findById(id);
         songFacade.delete(id);
         redirectAttributes.addFlashAttribute("alert_success", "Song " + song.getTitle() + " was created");
-        return "redirect:" + uriBuilder.path("/genre/list").toUriString();
+        return "redirect:" + uriBuilder.path("/song/list").toUriString();
     }
     
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -96,15 +99,15 @@ public class SongController {
     }
     
     /**
-	 * Spring Validator added to JSR-303 Validator for this @Controller only.
-	 * It is useful  for custom validations that are not defined on the form bean by annotations.
-	 * http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#validation-mvc-configuring
-	 */
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		if (binder.getTarget() instanceof SongCreateDTO) {
-			binder.addValidators(new SongCreateDTOValidator());
-		}
-	}
+    * Spring Validator added to JSR-303 Validator for this @Controller only.
+    * It is useful  for custom validations that are not defined on the form bean by annotations.
+    * http://docs.spring.io/spring/docs/current/spring-framework-reference/html/validation.html#validation-mvc-configuring
+    */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+            if (binder.getTarget() instanceof SongCreateDTO) {
+                    binder.addValidators(new SongCreateDTOValidator());
+            }
+    }
     
 }
