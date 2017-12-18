@@ -1,6 +1,7 @@
 
 package cz.fi.muni.pa165.musiclibrary.web.controllers.rest;
 
+import cz.fi.muni.pa165.musiclibrary.dto.SongCreateDTO;
 import cz.fi.muni.pa165.musiclibrary.dto.SongDTO;
 import cz.fi.muni.pa165.musiclibrary.facade.SongFacade;
 import cz.fi.muni.pa165.musiclibrary.web.exceptions.ResourceNotFoundException;
@@ -9,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Controller
 @RestController
-@RequestMapping("/songrest")
+@RequestMapping("/rest/songs")
 public class SongRestController {
     
     @Autowired
@@ -105,6 +106,17 @@ public class SongRestController {
         }       
         return songDTOs;
 
+    }
+    
+    @RequestMapping(value = "/1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+		produces = MediaType.APPLICATION_JSON_VALUE)
+    public final SongDTO createSong(@RequestBody SongCreateDTO song) throws Exception {
+            try {
+                    Long id = songFacade.create(song);
+                    return songFacade.findById(id);
+            } catch (Exception ex) {
+                    throw new ResourceNotFoundException();
+            }
     }
     
 }
